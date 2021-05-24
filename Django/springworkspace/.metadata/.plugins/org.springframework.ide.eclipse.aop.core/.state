@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop-reference-model>
+<aop-project name="HMB"/>
+<aop-project name="project8"/>
+<aop-project name="spring_book"/>
+<aop-project name="NCS_test"/>
+<aop-project name="ebookimg123"/>
+<aop-project name="spring_MVC"/>
+<aop-project name="spring31_mybatis_board"/>
+<aop-project name="ebook() test3"/>
+<aop-project name="haengbok-master"/>
+</aop-reference-model>

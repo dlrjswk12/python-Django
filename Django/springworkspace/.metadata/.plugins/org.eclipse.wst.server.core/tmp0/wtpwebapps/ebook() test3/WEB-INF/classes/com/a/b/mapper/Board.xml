@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.a.b.dao.BoardDao">
+
+	<insert id="boardWrite">
+	INSERT INTO BOARD(
+	BBID, BID, BTITLE, BCONTENT, BDATE,
+	BHIT, BGROUP, BSTEP, BINDENT, BBURL	
+	) VALUES(
+	BOARD_SEQ.NEXTVAL, #{param1,jdbcType=VARCHAR}, #{param2,jdbcType=VARCHAR}, 
+	#{param3,jdbcType=VARCHAR}, sysdate, 0, BOARD_SEQ.CURRVAL, 0, 0, #{param4,jdbcType=VARCHAR}
+	)
+	</insert>
+
+
+	<select id="boardList" resultType="com.a.b.dto.Board">
+		SELECT BBID, BID, BTITLE, BCONTENT, BDATE, BHIT, 
+	BGROUP, BSTEP, BINDENT
+	FROM BOARD
+	ORDER BY BGROUP DESC, BSTEP ASC
+	</select>
+
+
+	<select id="boardContent_view" resultType="com.a.b.dto.Board" parameterType="long">
+	SELECT * FROM 
+	BOARD
+	WHERE BBID = #{param1}
+	</select>
+
+	<update id="boardModify">
+	UPDATE BOARD
+	SET BTITLE = #{param2,jdbcType=VARCHAR}, BCONTENT = #{param3,jdbcType=VARCHAR}, BBURL = #{param4,jdbcType=VARCHAR}
+	WHERE BBID = #{param1,jdbcType=NUMERIC}
+	</update>
+
+
+	<delete id="boardDelete" parameterType="long">
+	DELETE FROM BOARD WHERE BBID = #{param1}
+	</delete>
+
+
+	<update id="upHit" parameterType="long">
+	UPDATE BOARD SET BHIT = BHIT + 1
+	WHERE BBID = #{param1}
+	</update>
+
+	<select id="titlesearch" resultType="com.a.b.dto.Board">
+		select * from BOARD
+		where BTITLE like ('%'||#{param1,jdbcType=VARCHAR}||'%')
+	</select>
+	
+	<select id="contentsearch" resultType="com.a.b.dto.Board">
+		select * from BOARD
+		where BCONTENT like ('%'||#{param1,jdbcType=VARCHAR}||'%')
+	</select>
+
+	<select id="idsearch" resultType="com.a.b.dto.Board">
+		select * from BOARD
+		where BID like ('%'||#{param1,jdbcType=VARCHAR}||'%')
+	</select>
+	
+	<select id="allsearch" resultType="com.a.b.dto.Board">
+		select * from BOARD
+		where BTITLE like ('%'||#{param1,jdbcType=VARCHAR}||'%') or 
+		BCONTENT like ('%'||#{param1,jdbcType=VARCHAR}||'%') or 
+		BID like ('%'||#{param1,jdbcType=VARCHAR}||'%')
+	</select>
+	
+</mapper>

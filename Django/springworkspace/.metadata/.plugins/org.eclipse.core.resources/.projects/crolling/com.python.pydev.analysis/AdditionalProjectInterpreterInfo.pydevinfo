@@ -1,0 +1,30 @@
+-- VERSION_5
+-- START DISKCACHE_3
+J:\springworkspace\.metadata\.plugins\org.eclipse.core.resources\.projects\crolling\com.python.pydev.analysis\v2_indexcache
+crollingtesst.2021_03_10|1615340379093001100|J:\springworkspace\crolling\crollingtesst\2021_03_10.py
+crollingtesst.__init__|1615249984340435300|J:\springworkspace\crolling\crollingtesst\__init__.py
+crollingtesst.검색태스트|1615250201966405100|J:\springworkspace\crolling\crollingtesst\검색태스트.py
+test.__init__|1615249960134610500|J:\springworkspace\crolling\test\__init__.py
+-- END DISKCACHE
+-- START DICTIONARY
+4
+2=crollingtesst.2021_03_10
+3=J:\springworkspace\crolling\crollingtesst\검색태스트.py
+1=J:\springworkspace\crolling\crollingtesst\2021_03_10.py
+4=crollingtesst.검색태스트
+-- END DICTIONARY
+-- START TREE 1
+9
+htm|1|html!1^11#1*19@
+htt|0|
+qq|0|
+qqq|0|
+req|0|
+sea|1|search!3^18#5*34@
+sou|1|soup!1^12#1*19@
+tit|1|title!1^16#1*19@
+url|1|url!1^10#1*19@
+-- END TREE
+-- START TREE 2
+0
+-- END TREE

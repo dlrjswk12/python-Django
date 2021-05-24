@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="work.user.UserBean" alias="user"/>
+		<typeAlias type="work.book.BookBean" alias="book"/>
+		<typeAlias type="work.rent.RentBean" alias="rent"/>
+		<typeAlias type="work.reserve.ReserveBean" alias="reserve"/>
+		<typeAlias type="work.code.CodeBean" alias="code"/>
+			</typeAliases>
+
+	<mappers>
+		<mapper resource="conf/sql-user.xml" />
+		<mapper resource="conf/sql-book.xml" />
+		<mapper resource="conf/sql-rent.xml" />
+		<mapper resource="conf/sql-reserve.xml" />
+		<mapper resource="conf/sql-code.xml" />
+	</mappers>
+</configuration>

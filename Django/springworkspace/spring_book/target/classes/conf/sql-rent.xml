@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				  "dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rent">
+	<insert id="createRent" parameterType="map">
+		<![CDATA[
+			INSERT INTO TB_RENT(
+			  RENT_NO
+			, USER_CODE
+			, BOOK_CODE
+			) VALUES (
+			 'RENT' || LPAD(RENT_SEQ.NEXTVAL, 3, 0)
+			, #{userCode}
+			, #{bookCode}
+
+			)
+		]]>
+	</insert>
+
+	<update id="updateConfirmRent" parameterType="map">
+		<![CDATA[
+			UPDATE TB_RENT
+			SET RENTAL_STATUS           = '1'
+			  , RENT_STA_DATE           = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI')
+			  , RENT_END_DATE           = TO_CHAR(SYSDATE + 3, 'YYYY-MM-DD HH24:MI')
+			WHERE RENT_NO = #{rentNo}
+		]]>
+	</update>
+
+	<delete id="deleteReturn" parameterType="map">
+		<![CDATA[
+			DELETE
+			FROM  TB_RENT
+			WHERE RENT_NO = #{rentNo}
+		]]>
+	</delete>
+
+	<update id="updateExtend" parameterType="map">
+		<![CDATA[
+			UPDATE TB_RENT
+			SET EXTEND_YN 			= 'Y'
+			  , RENT_END_DATE		= TO_CHAR((TO_DATE(RENT_END_DATE, 'YYYY-MM-DD HH24:MI') + 1), 'YYYY-MM-DD HH24:MI')
+			WHERE RENT_NO = #{rentNo}
+		]]>
+	</update>
+</mapper>

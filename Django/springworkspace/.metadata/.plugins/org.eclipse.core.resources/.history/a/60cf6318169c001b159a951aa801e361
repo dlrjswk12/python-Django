@@ -1,0 +1,10 @@
+package com.NCS.test.java;
+
+public final class lotto {
+
+	public static void main(String[] args) {
+		lotto[] = new int[6];
+
+	}
+
+}

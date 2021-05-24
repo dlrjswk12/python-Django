@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				  "dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+	<resultMap id="bookResult" type="book">
+		<result property="bookCode" column="BOOK_CODE" />
+	    <result property="bookName" column="BOOK_NAME"/>
+	    <result property="bookImage" column="BOOK_IMAGE"/>
+	    <result property="bookPublishDate" column="BOOK_PUBLISH_DATE"/>
+	    <result property="bookPublisher" column="BOOK_PUBLISHER"/>
+	    <result property="bookAuthor" column="BOOK_AUTHOR" />
+	    <result property="bookGenreCd" column="BOOK_GENRE_CD"/>
+	    <result property="bookRegDate" column="BOOK_REG_DATE"/>
+	</resultMap>
+
+	<select id="retrieveBookList" resultType="map" parameterType="map">
+		<![CDATA[
+			SELECT BOOK.BOOK_CODE
+			     , BOOK.BOOK_NAME
+			     , BOOK.BOOK_IMAGE
+			     , BOOK.BOOK_PUBLISH_DATE
+			     , BOOK.BOOK_PUBLISHER
+			     , BOOK.BOOK_AUTHOR
+			     , (SELECT COMM_CD_NM
+			        FROM   TB_COM_CODE
+			        WHERE COMM_TY_CD = 'CODE0101'
+			        AND COMM_CD = BOOK.BOOK_GENRE_CD
+			        ) AS BOOK_GENRE_CD_NM
+			     , (SELECT NAME FROM TB_COM_USER WHERE USER_CODE = RENT.USER_CODE) USER_NM
+			     , BOOK.BOOK_REG_DATE
+			     , RENT.RENT_NO
+			     , RENT.USER_CODE
+			     , RENT.RENTAL_STATUS
+			     , RENT.RENT_STA_DATE
+			     , RENT.RENT_END_DATE
+			     , RENT.EXTEND_YN
+		  		 , (CASE WHEN RENT.EXTEND_YN = 'N' AND RESERVE.RESERVE_NO IS NULL THEN '대출신청가능'
+		                ELSE '대출신청불가능' END) AS EXTEND_NM
+				 , RESERVE.RESERVE_NO
+			FROM   TB_BOOK BOOK
+				   LEFT JOIN TB_RENT RENT ON RENT.BOOK_CODE = BOOK.BOOK_CODE
+				   LEFT JOIN TB_RESERVE RESERVE ON RESERVE.BOOK_CODE = RENT.BOOK_CODE
+			WHERE 1=1
+			]]>
+			<choose>
+				<when test='rentParam == "true"'>
+				AND  RENT.USER_CODE = #{userCode}
+				AND  RENT.RENTAL_STATUS = '1'
+				</when>
+				<when test='reserveParam == "true"'>
+				AND  RESERVE.USER_CODE = #{userCode}
+				AND  RENT.RENTAL_STATUS = '1'
+				</when>
+				<when test='manageParam == "true"'>
+				ORDER BY BOOK.BOOK_REG_DATE DESC
+				</when>
+				<when test='grade == "A"'>
+				AND  RENT.RENTAL_STATUS IS NOT NULL
+				</when>
+			</choose>
+	</select>
+
+	<select id="retrieveBook" parameterType="map" resultMap="bookResult">
+		SELECT BOOK.BOOK_CODE
+		     , BOOK.BOOK_NAME
+		     , BOOK.BOOK_IMAGE
+		     , BOOK.BOOK_PUBLISH_DATE
+		     , BOOK.BOOK_PUBLISHER
+		     , BOOK.BOOK_AUTHOR
+		     , BOOK.BOOK_GENRE_CD
+		FROM   TB_BOOK BOOK
+		WHERE  BOOK_CODE = #{bookCode}
+	</select>
+
+
+	<insert id="createBook" parameterType="book">
+		<![CDATA[
+		INSERT INTO TB_BOOK(
+			  BOOK_CODE                /* 도서코드  */
+			, BOOK_NAME                /* 도서명    */
+			, BOOK_IMAGE               /* 도서이미지  */
+			, BOOK_PUBLISH_DATE        /* 출간일    */
+			, BOOK_PUBLISHER           /* 출판사    */
+			, BOOK_AUTHOR              /* 저자     */
+			, BOOK_GENRE_CD            /* 장르코드   */
+			, BOOK_REG_DATE            /* 도서등록일  */
+		) VALUES (
+			  #{bookGenreCd} || LPAD(BOOK_SEQ.NEXTVAL, 4, 0)
+			, #{bookName}
+			, #{bookImage}
+			, #{bookPublishDate}
+			, #{bookPublisher}
+			, #{bookAuthor}
+			, #{bookGenreCd}
+			, TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI')
+		)
+		]]>
+	</insert>
+
+	<update id="updateBook" parameterType="book">
+		<![CDATA[
+			UPDATE TB_BOOK
+			SET BOOK_NAME	              = #{bookName}
+			  , BOOK_IMAGE                = #{bookImage}
+			  , BOOK_PUBLISH_DATE         = #{bookPublishDate}
+		      , BOOK_PUBLISHER            = #{bookPublisher}
+		      , BOOK_AUTHOR               = #{bookAuthor}
+		      , BOOK_GENRE_CD             = #{bookGenreCd}
+	   		WHERE BOOK_CODE = #{bookCode}
+	   	]]>
+	</update>
+
+	<select id="retrieveStatisticsForGenre" resultType="map">
+		<![CDATA[
+			/* retrieveStatisticsForGenre */
+			SELECT (SELECT COMM_CD_NM FROM TB_COM_CODE WHERE COMM_TY_CD = 'CODE0101' AND COMM_CD = BOOK_GENRE_CD) AS BOOK_GENRE_CD_NM
+			     , COUNT(BOOK_GENRE_CD) AS BOOK_GENRE_COUNT
+			FROM TB_BOOK
+			GROUP BY BOOK_GENRE_CD
+		]]>
+	</select>
+
+	<select id="retrieveStatisticsForBookPublisher" resultType="map">
+		<![CDATA[
+			/* retrieveStatisticsForBookPublisher */
+			SELECT BOOK_PUBLISHER
+				 , COUNT(BOOK_PUBLISHER) AS BOOK_PUBLISHER_COUNT
+			FROM   TB_BOOK
+			GROUP BY BOOK_PUBLISHER
+		]]>
+	</select>
+
+	<select id="retrieveStatisticsForAuthor" resultType="map">
+		<![CDATA[
+			/* retrieveStatisticsForAuthor */
+			SELECT BOOK_AUTHOR
+				 , COUNT(BOOK_AUTHOR) AS BOOK_AUTHOR_COUNT
+			FROM   TB_BOOK
+			GROUP BY BOOK_AUTHOR
+		]]>
+	</select>
+
+	<select id="retrieveStatisticsForBookStatus" resultType="map">
+		<![CDATA[
+			/* retrieveStatisticsForBookStatus */
+			SELECT '예약' AS BOOK_STATUS_NM
+			     , COUNT(*) AS BOOK_STATUS_COUNT
+			FROM   TB_RESERVE
+			UNION ALL
+			SELECT DECODE(RENTAL_STATUS, '0', '대출신청중', '1', '대출중') AS BOOK_STATUS_NM
+			     , COUNT(RENTAL_STATUS) AS BOOK_STATUS_COUNT
+			FROm   TB_RENT
+			GROUP BY RENTAL_STATUS
+		]]>
+	</select>
+
+
+</mapper>

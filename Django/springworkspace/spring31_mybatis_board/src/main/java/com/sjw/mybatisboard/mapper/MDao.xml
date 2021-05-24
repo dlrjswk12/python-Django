@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+ <mapper namespace="com.sjw.mybatisboard.dao.MDao">
+ 
+ 	<select id ="memberList" resultType ="com.sjw.mybatisboard.dto.MDto">
+ 		SELECT NO,ID,JOINDATE,PASSWORD,PHONE,ISWITHREW
+ 		FROM MYMEMBER ORDER BY NO ASC 
+ 	</select>
+ 	
+ 	<insert id ="memberJoin">
+ 		INSERT INTO MYMEMBER (NO,ID,JOINDATE,PASSWORD,PHONE,ISWITHREW)
+ 		VALUES (MYMEMBER_SEQ.NEXTVAL, #{param1},#{param2},#{param3},#{param4},'JOINED')
+ 	</insert>
+ 	
+ 	<select id = "memberView" resultType ="com.sjw.mybatisboard.dto.MDto" parameterType="string">
+ 		SELECT * FROM MYMEMBER WHERE ID = #{param1}
+ 	</select>
+ 	
+ 	<update id = "memberModify" >
+ 		UPDATE MYMEMBER SET  PASSWORD =#{param2}, PHONE =#{param3}, ISWITHREW=#{param4} WHERE ID = #{param1}
+ 	</update>
+ 	
+ 	<delete id ="memberRemove" parameterType="string">
+ 		DELETE FROM MYMEMBER WHERE ID = #{param1}
+ 	</delete>
+ 	
+ 	
+ 	<delete id = "memberExit" parameterType="string" >
+ 		UPDATE MYMEMBER SET ISWITHREW='UNJOINED' WHERE ID = #{param1}
+ 	</delete>
+ 	
+ 
+ </mapper>   

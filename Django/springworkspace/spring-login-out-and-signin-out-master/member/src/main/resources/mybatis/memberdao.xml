@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dywlr.mem.dao.MemberDao">
+
+	<insert id="insert"  parameterType="com.dywlr.mem.model.MemberInfo">
+		insert memberlist values (#{email}, #{password}, #{sexual}, #{birth}, #{teloff}, #{phone}, #{name})
+	</insert>
+	
+	<insert id="insertProfile"  parameterType="com.dywlr.mem.model.MemberProfile">
+		insert profileList values (#{email}, #{categories}, #{locales}, #{universe}, #{attending}, #{title}, #{career}, #{teacher}, #{clas})
+	</insert>
+	
+	<insert id="insertImg" parameterType="com.dywlr.mem.model.ImgItem">
+		insert imgdata (email, filename, realpath) values (#{email}, #{filename}, #{realpath})
+	</insert>
+	
+	<select id="imgId" resultType="Integer" >
+		select img_id from imgdata order by img_id desc
+	</select>
+
+	<select id="selectImgData" resultType="String" >
+		select realpath from imgdata where email=#{email}
+	</select>	
+	
+	<select id="checkEmail" resultType="String" >
+		select email from memberlist where email=#{email}
+	</select>
+	
+	<select id="checkPassword" resultType="String" >
+		select password from memberlist where email=#{email}
+	</select>
+	
+	<select id="checkProfile" resultType="String" >
+		select email from profilelist where email=#{email}
+	</select>
+	
+	<update id="updateProfile"  parameterType="com.dywlr.mem.model.MemberProfile">
+		update profilelist set categories=#{categories} , locales= #{locales}, universe=#{universe} , attending=#{attending} , title=#{title}, career= #{career}, teacher=#{teacher}, clas=#{clas}  where email=#{email}
+	</update>
+	
+	<select id="imgCheck" resultType="String" >
+		select email from imgdata where email=#{email}
+	</select>
+	
+	<update id="imgUpdate"  parameterType="com.dywlr.mem.model.ImgItem">
+		update imgdata set filename=#{filename} , realpath= #{realpath} where email=#{email}
+	</update>
+	
+	<select id="selectProfile" resultType="com.dywlr.mem.model.MemberProfileDb" >
+		select * from profilelist where email=#{email}
+	</select>
+	
+</mapper>

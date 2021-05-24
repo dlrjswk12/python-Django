@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="target" class="com.springx.pointcut.NewlecExam" 
+		p:kor="100" p:eng="96" p:math="100" p:com ="57"/>
+	<bean id = "logAroundAdvice" class="com.springx.pointcut.LogAroundAdvice" />
+	<bean id = "logBeforeAdvice" class="com.springx.pointcut.LogBeforeAdvice" />
+	<bean id = "logAfterReturningAdvice" class="com.springx.pointcut.LogAfterReturningAdvice" />
+	<bean id = "logAfterThrowingAdvice" class="com.springx.pointcut.LogAfterThrowingAdvice" />
+	<bean id = "classicPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+		<property name="mappedName" value="total" /> 
+	</bean>
+	
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" /> 
+		<property name="pointcut" ref="classicPointCut" /> 
+	</bean>
+	
+	
+	<bean id = "proxy" class ="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="target"/>
+		<property name = "interceptorNames">
+			<list>
+				<value>logAroundAdvice</value>
+				<value>classicBeforeAdvisor</value>
+				<value>logAfterReturningAdvice</value>
+				<value>logAfterThrowingAdvice</value>
+			</list>
+		</property>
+	</bean>
+	
+		
+
+</beans>

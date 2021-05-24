@@ -1,0 +1,29 @@
+package com.NCS.test.java;
+
+import javax.swing.JOptionPane;
+
+public class Testjava {
+
+	public static void main(String[] args) {
+	
+
+	}
+
+	public static String inputData() {
+		
+		String score = JOptionPane.showInputDialog("점수을 입력");
+		String name = JOptionPane.showInputDialog("이름을 입력");
+		
+		int realScore = Integer.parseInt(score);
+		
+		String grade = "";
+		
+		if (realScore>=90) {
+			grade = "A";
+		}
+		
+		return null;
+	}
+	
+	
+}

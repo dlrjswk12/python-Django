@@ -1,0 +1,18 @@
+[*] 
+@Service 
+@Repository
+@Component 
+@Autowired
+@Transactional
+@Scope 
+
+[MVC Pattern 관련] 
+@Controller 
+@RequestMapping
+@PathVariable 
+@RequestParam
+@ModelAttribute
+@SessionAttributes 
+
+[보안관련]
+@PreAuthorize 

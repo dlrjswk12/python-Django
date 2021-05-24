@@ -1,0 +1,10 @@
+127.0.0.1 - - [22/Feb/2021:09:39:46 +0900] "GET / HTTP/1.1" 404 807
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:39:47 +0900] "GET /spring-bbs/WEB-INF/jsp/home/Main.jsp HTTP/1.1" 404 721
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:39:47 +0900] "GET /favicon.ico HTTP/1.1" 404 818
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:39:54 +0900] "GET /spring-bbs/Main HTTP/1.1" 404 721
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:39:58 +0900] "GET /spring-bbs/Main.jsp HTTP/1.1" 404 800
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:40:12 +0900] "GET /spring-bbs/ HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:40:13 +0900] "GET /spring-bbs/account/logon HTTP/1.1" 200 5433
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:40:13 +0900] "GET /spring-bbs/Scripts/jquery-ui-1.10.3.custom/js/i18n/jquery.ui.datepicker-kr.js HTTP/1.1" 404 721
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:40:13 +0900] "GET /spring-bbs/Scripts/jquery-ui-1.10.3.custom/js/i18n/jquery.ui.datepicker-kr.js HTTP/1.1" 404 721
+0:0:0:0:0:0:0:1 - - [22/Feb/2021:09:40:20 +0900] "POST /spring-bbs/account/logon HTTP/1.1" 500 23850

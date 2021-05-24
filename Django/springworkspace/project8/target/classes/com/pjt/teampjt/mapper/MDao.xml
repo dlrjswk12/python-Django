@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pjt.teampjt.dao.MDao">
+
+	<select id="memberList" resultType="com.pjt.teampjt.dao.MDao">
+		select NO,ID,NAME,BIRTHDAY,PASSWORD,PHONE,ADRESS,ISWITHREW,CASH
+		from MYMEMBER order by NO ASC
+	</select>
+	<insert id="memberJoin" >
+		insert into MYMEMBER (NO,ID,NAME,BIRTHDAY,PASSWORD,PHONE,ADRESS,ISWITHREW,CASH) 
+		values (MYMEMBER_SEQ.nextval, #{param1},#{param2},#{param3},#{param4},#{param5},#{param6},'JOINED','0')
+	</insert>
+	
+	<select id="memberView" resultType="com.pjt.teampjt.dto.MyMember" parameterType="string">
+		select * from MYMEMBER where ID = #{param1}
+	</select>
+		
+	<update id="memberModify">
+		update MYMEMBER set NAME = #{param2}, PASSWORD = #{param3}, PHONE = #{param4}, ADRESS = #{param5}, ISWITHREW=#{param6} where ID = #{param1}
+	</update> 
+
+	<!-- 관리자 사용 :  회원 삭제 -->
+	<delete id="memberRemove" parameterType="string" >
+		delete from MYMEMBER where ID =  #{param1}
+	</delete>
+	
+	<!-- 회원 사용 :  회원 탈퇴  -->
+	<delete id="memberExit" parameterType="string" >
+		update MYMEMBER set ISWITHREW='UNJOINED' where ID = #{param1}
+	</delete>
+	
+	<select id="idcheck" resultType="java.lang.String" parameterType="java.lang.String">
+		select ID from MYMEMBER where ID = #{param1}
+	</select>
+	
+	<update id="cashupdown">
+		update MYMEMBER set CASH = #{param2} where ID = #{param1}
+	</update>
+	
+	<select id="idsearch" resultType="com.pjt.teampjt.dto.MyMember" parameterType="string">
+		select ID from MYMEMBER where NAME = #{param1}, PHONE = #{param2}
+	</select>
+	
+	<select id="passwordsearch" resultType="com.pjt.teampjt.dto.MyMember" parameterType="string">
+		select PASSWORD from MYMEMBER where ID = #{param1}, NAME = #{param2}
+	</select>
+	
+</mapper>

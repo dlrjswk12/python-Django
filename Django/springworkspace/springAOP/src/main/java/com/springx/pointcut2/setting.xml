@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id = "target" class="com.springx.pointcut2.NewlecExam" p:kor="100" p:eng="96" p:math="100" p:com ="57"/>
+	<bean id = "logAroundAdvice" class="com.springx.pointcut2.LogAroundAdvice" />
+	<bean id = "logBeforeAdvice" class="com.springx.pointcut2.LogBeforeAdvice" />
+	<bean id = "logAfterReturningAdvice" class="com.springx.pointcut2.LogAfterReturningAdvice" />
+	<bean id = "logAfterThrowingAdvice" class="com.springx.pointcut2.LogAfterThrowingAdvice" />
+		
+	<bean id = "classBeforeAdvice" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice"/>
+		<property name="mappedNames">
+			<list>
+				<value>total</value>
+				<value>avg</value>
+			</list>
+		</property> 
+	</bean>
+	
+	<bean id = "classAroundAdvice" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logAroundAdvice"/>
+		<property name="mappedName" value="total" />
+		
+	</bean>
+
+	<bean id = "proxy" class ="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target" ref="target"/>
+		<property name = "interceptorNames">
+			<list>
+				<value>classAroundAdvice</value>
+				<value>classBeforeAdvice</value>
+				<value>logAfterReturningAdvice</value>
+				<value>logAfterThrowingAdvice</value>
+			</list>
+		</property>
+	</bean>
+</beans>

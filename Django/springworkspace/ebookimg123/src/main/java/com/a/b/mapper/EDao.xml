@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.a.b.dao.EDao">
+
+	<select id="ebookView" resultType="com.a.b.dto.Ebook">
+		select * FROM EBOOK WHERE BBOOKNAME = #{param1}
+	</select>
+	<select id="ebookList" resultType="com.a.b.dto.Ebook">
+		select BBOOKNO, BBOOKNAME, BCONTENT, BPRICE, BWRITER, BPUBLISHER, BCATEGORY
+		from EBOOK order by BBOOKNO ASC
+	</select>
+	
+	<insert id="ebookInsert">
+		insert into EBOOK (bBookno, bBookname, bContent, 
+							bPrice, bWriter, bPublisher, bCategory) 
+		values (BOOK_SEQ.nextval, #{param1},#{param2},
+							#{param3},#{param4},#{param5}#{param6})
+	</insert>
+	
+	<delete id="ebookDelet" parameterType = "Integer">
+		delete FROM EBOOK WHERE bBookno = #{param1}
+	</delete>
+	
+	<select id="ebookHit" resultType="Integer"> <!-- 오라클명령어로 렌탈리스트에서 대여 총 횟수 조회 -->
+		SELECT COUNT(BBOOKNO) 
+		FROM RENTALLIST
+		WHERE BBOOKNO IN (SELECT BBOOKNO
+        				  FROM EBOOK 
+        				  WHERE BBOOKNAME = #{param1})
+	</select>
+	
+	<select id="ebookRentalingCheck" resultType="Integer">
+		SELECT COUNT(BBOOKNO)
+		FROM RENTALINGLIST
+		WHERE BID = #{param1} 
+		AND BBOOKNO IN (SELECT BBOOKNO
+        				  FROM EBOOK 
+        				  WHERE BBOOKNAME = #{param2})
+	</select>
+	
+	<insert id="ebookRentalRecord"> <!--  안쓸듯 -->
+		insert into RENTALLIST (bRentalno, bId, bBookno, bRentaldate) 
+		<!-- 번호, 사용자ID, 책번호, 날짜 -->
+		values (RENTALLIST_SEQ.nextval, #{param1}, #{param2}, SYSDATE)
+	</insert>
+	
+	
+	
+	<insert id="ebookRental">  <!-- 렌탈링, 히스토리 두개 다중삽입 -->
+	<!-- 	insert
+		into RENTALINGLIST (bRentalno, bId, bBookno, bRentaldate, bReturndate)
+		values (RENTALINGLIST_SEQ.nextval, #{param1}, #{param2}, SYSDATE, SYSDATE+3) -->
+	
+		insert all
+		into RENTALINGLIST (bRentalno, bId, bBookno, bRentaldate, bReturndate)
+		values (RENTALINGLIST_SEQ.nextval, #{param1}, #{param2}, SYSDATE, SYSDATE+3)
+		
+		into RENTALLIST (bRentalno, bId, bBookno, bRentaldate)
+		values (RENTALLIST_SEQ.nextval, #{param1}, #{param2}, SYSDATE)
+		
+		SELECT * FROM DUAL
+	</insert>
+	
+	<update id="ebookRentalPlus"> <!-- 수정중 -->
+		update RENTALINGLIST set bReturndate+3 WHERE BBOOKNO = #{param1}
+	</update>
+	
+	<select id="ebookRentalList" resultType = "com.a.b.dto.RentalList"> 
+	<!-- 멤버아이디 참조해서.. -->
+		select * 
+		FROM RENTALLIST 
+		WHERE bId = #{param1} 
+	</select>
+	
+	<select id="ebookRentalingList" resultType = "com.a.b.dto.RentalingList">
+	 <!-- 현재대여중보기 -->
+		select BRENTALNO, BID, BBOOKNO, 
+		BRENTALDATE,
+		BRETURNDATE
+		<!-- TO_CHAR(BRETURNDATE, 'YYYY-MM-DD HH24-MI-SS')-->
+		FROM RENTALINGLIST
+		WHERE bId = #{param1}
+	</select>
+	
+	<update id="rentalCashdown">
+	UPDATE MEMBER
+	SET BCASH = BCASH-3
+	WHERE BID = #{param1}
+	</update>
+	
+	
+	
+	<delete id="ebookRentalOverListDelete"> <!-- 날짜지난거만삭제 -->
+		delete FROM RENTALINGLIST 
+		WHERE SYSDATE > BRETURNDATE
+		AND bId = #{param1}
+	</delete>
+	
+	<select id="namesearch" resultType="com.a.b.dto.Ebook">
+		select * from EBOOK where BBOOKNAME like ('%'||#{param1}||'%')
+	</select>
+	
+	<select id="writersearch" resultType="com.a.b.dto.Ebook">
+		select * from EBOOK where BWRITER like ('%'||#{param1}||'%')
+	</select>
+	
+	<select id="publishersearch" resultType="com.a.b.dto.Ebook">
+		select * from EBOOK where BPUBLISHER like ('%'||#{param1}||'%')
+	</select>
+	
+	<select id="categorysearch" resultType="com.a.b.dto.Ebook">
+		select * from EBOOK where BCATEGORY like ('%'||#{param1}||'%')
+	</select>
+	<select id="allsearch" resultType="com.a.b.dto.Ebook">
+		select * from EBOOK where bbookname like ('%'||#{param1}||'%') or bcategory like ('%'||#{param1}||'%') or bwriter like ('%'||#{param1}||'%') or bpublisher like ('%'||#{param1}||'%')
+	</select>
+	
+
+</mapper>

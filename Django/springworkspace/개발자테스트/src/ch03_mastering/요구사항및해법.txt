@@ -1,0 +1,7 @@
+<요구사항>  ==> <해법>
+==================================================
+1. 요청수락  ==> public Response processRequest(Request request)
+2. 핸들러 선택 ==> this.requestHandlers.get(request.getName())
+3. 요청 라우팅 ==> response = getRequestHandler(request).process(request);
+4. 오류처리 ==> ErrorResponse 클래스
+==================================================

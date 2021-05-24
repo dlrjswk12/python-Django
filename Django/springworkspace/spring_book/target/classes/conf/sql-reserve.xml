@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				  "dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserve">
+	<resultMap id="reserveResult" type="reserve">
+		<result property="reserveNo" column="RESERVE_NO" />
+		<result property="rentNo" column="RENT_NO" />
+		<result property="userCode" column="USER_CODE" />
+	    <result property="bookCode" column="BOOK_CODE"/>
+	</resultMap>
+
+    <select id="retrieveReserve" parameterType="map" resultMap="reserveResult">
+    		SELECT RESERVE_NO
+    			 , RENT_NO
+    			 , USER_CODE
+    			 , BOOK_CODE
+    		FROM   TB_RESERVE
+    		WHERE  RENT_NO = #{rentNo}
+    </select>
+
+	<insert id="createReserve" parameterType="map">
+		<![CDATA[
+			INSERT INTO TB_RESERVE(
+			  RESERVE_NO
+			, RENT_NO
+			, USER_CODE
+			, BOOK_CODE
+			) VALUES (
+			 'RESERVE' || LPAD(RESERVE_SEQ.NEXTVAL, 3, 0)
+			, #{rentNo}
+			, #{userCode}
+			, #{bookCode}
+			)
+		]]>
+	</insert>
+
+	<delete id="deleteReserve" parameterType="map">
+		<![CDATA[
+ 			DELETE
+ 			FROM   TB_RESERVE
+ 	   		WHERE  RESERVE_NO = #{reserveNo}
+ 		]]> -->
+	</delete>
+
+</mapper>
